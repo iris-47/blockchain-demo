@@ -24,6 +24,9 @@ void BlockChain::start(){
     addMessage(Message(nodes[1], nodes[2]));
     addMessage(Message(nodes[2], nodes[3]));
 
+    addShard(10, sf::Vector2f(500, 500));
+    addShard(6 , sf::Vector2f(700, 700));
+
     _running = true;
 }
 

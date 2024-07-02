@@ -12,8 +12,10 @@ private:
     SceneContext& _scene;
     BlockChain& _blockChain;
 
-    void renderNodes() const;
+    void renderNode(Node& node) const;
+    void renderNodes() const;   
     void renderMessages() const;
+    void renderShards() const;
 
 public:
     Renderer(SceneContext& scene, BlockChain& blockChain);

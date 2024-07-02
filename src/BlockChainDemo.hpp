@@ -3,7 +3,10 @@
 #include "Renderer.hpp"
 
 const char* title = "BlockChain Demo";
-
+/**
+ * @class BlockChainDemo
+ * @brief 区块链演示程序, 继承自Application, 用于定义窗口与鼠标键盘事件, 并负责调用区块链更新和渲染器
+ */
 class BlockChainDemo : public Application {
 private:
     BlockChain _blockChain; // 区块链结构，用于定义并更新节点和消息

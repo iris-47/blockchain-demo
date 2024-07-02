@@ -6,15 +6,21 @@ Renderer::Renderer(SceneContext& scene, BlockChain& blockChain): _scene(scene), 
 void Renderer::render() const{
     renderNodes();
     renderMessages();
+    renderShards();
+}
+
+
+void Renderer::renderNode(Node& node) const{
+    sf::CircleShape circle(node.getRadius());
+    circle.setFillColor(node.getColor());
+    circle.setPosition(node.getPosition() - sf::Vector2f(node.getRadius(), node.getRadius()));
+
+    _scene.draw(circle);
 }
 
 void Renderer::renderNodes() const{
     for(auto& node: _blockChain.nodes){
-        sf::CircleShape circle(node.getRadius());
-        circle.setFillColor(node.getColor());
-        circle.setPosition(node.getPosition() - sf::Vector2f(node.getRadius(), node.getRadius()));
-
-        _scene.draw(circle);
+        renderNode(node);
     }
 }
 
@@ -36,5 +42,23 @@ void Renderer::renderMessages() const{
         //     particleArray[i] = message.particles[i].vertex;
         // }
         // _scene.draw(particleArray);
+    }
+}
+
+void Renderer::renderShards() const{
+    for(auto &shard: _blockChain.shards){
+        // 绘制分片框
+        sf::CircleShape circle(shard._radius);
+        circle.setFillColor(sf::Color::Transparent);
+        circle.setOutlineColor(sf::Color::White);
+        circle.setOutlineThickness(1.f);
+        circle.setPosition(shard._center - sf::Vector2f(shard._radius, shard._radius));
+        _scene.draw(circle);
+
+
+        // 绘制分片的节点
+        for(auto &node: shard.nodes){
+            renderNode(node);
+        }
     }
 }

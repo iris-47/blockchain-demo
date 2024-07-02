@@ -1,7 +1,7 @@
 #ifndef MESSAGE_HPP_
 #define MESSAGE_HPP_
 
-#include "Node.hpp"
+#include "Struct.hpp"
 
 // 发里福笑的粒子效果
 struct Particle {

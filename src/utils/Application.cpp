@@ -12,8 +12,6 @@ Application::Application(const std::string& window_name, sf::Vector2u window_siz
     _window.setFramerateLimit(60);
     _window.setVerticalSyncEnabled(_VSync);
     ImGui::SFML::Init(_window);
-
-    _sceneContext.registerDefaultCallbacks(_eventManager);
 }
 
 Application::~Application() {
@@ -43,7 +41,7 @@ void Application::run() {
 
         sf::Time dt = clock.restart();
         if (dt > sf::seconds(0.02f)) {
-            Logger::getLogger().log(Logger::LogLevel::WARNING, "Frame time too long: " + std::to_string(dt.asSeconds()) + "s");
+            Logger::getLogger().log(Logger::LogLevel::DEBUG, "Frame time too long: " + std::to_string(dt.asSeconds()) + "s");
             continue;
         }
 
