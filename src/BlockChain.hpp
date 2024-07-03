@@ -8,7 +8,7 @@
 
 #include "Struct.hpp"
 #include "Logger.hpp"
-#include "Message.hpp"
+#include "Shard.hpp"
 
 /**
  * @class BlockChain
@@ -18,8 +18,8 @@ class BlockChain{
     friend class Renderer; // 用于渲染器访问BlockChain
 private:
     std::vector<Node> nodes; // TODO:shards引入后，nodes失去了意义，考虑删除
-    std::vector<Message> messages;
-    std::vector<Shard> shards;
+    std::vector<Message> messages; // 代表分片外的消息，片内消息位于Shard结构体中
+    std::vector<Shard> shards;     // 分片
 
     bool _running = false;
     float _speed = 1000.0f;

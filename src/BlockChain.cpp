@@ -12,6 +12,11 @@ void BlockChain::update(sf::Time dt){
         // 删除传递完成的消息
         return message.update(dt);
     }), messages.end());
+
+    // 调用shard更新
+    for(auto& shard : shards){
+        shard.update(dt);
+    }
 }
 
 void BlockChain::start(){
@@ -26,6 +31,9 @@ void BlockChain::start(){
 
     addShard(10, sf::Vector2f(500, 500));
     addShard(6 , sf::Vector2f(700, 700));
+
+    shards[0].addMessage(0, 1);
+    shards[0].addMessage(1, 2);
 
     _running = true;
 }

@@ -1,4 +1,5 @@
-#include "struct.hpp"
+#include "Shard.hpp"
+#include "Struct.hpp"
 #include "Logger.hpp"
 #include "config.h"
 
@@ -19,10 +20,11 @@ bool isNonOverlapping(Node& node, std::vector<Node>& nodes, float minDistance) {
 
 Shard::Shard(int NNum, sf::Vector2f center){
     _center = center;
-    _radius = (std::sqrt(NNum) + 1) * RADIUS_RATE;
+    _radius = (std::sqrt(NNum) + 1) * CONFIG::RADIUS_RATE;
 
     int innerRadius = _radius * 0.8f;
 
+    // 随机布局节点
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<float> dis(0, 1);
@@ -32,44 +34,36 @@ Shard::Shard(int NNum, sf::Vector2f center){
     float theta = 2 * PI * dis(gen);
     float x = center.x + r * std::cos(theta);
     float y = center.y + r * std::sin(theta);
-    nodes.push_back(Node(x, y, NODE_RADIUS,sf::Color::Yellow));
+    nodes.push_back(Node(x, y, CONFIG::NODE_RADIUS,sf::Color::Yellow));
 
     while(nodes.size() < NNum){
         float r = innerRadius * std::sqrt(dis(gen));
         float theta = 2 * PI * dis(gen);
         float x = center.x + r * std::cos(theta);
         float y = center.y + r * std::sin(theta);
-        Node node = Node(x, y, NODE_RADIUS,sf::Color::White);
+        Node node = Node(x, y, CONFIG::NODE_RADIUS,sf::Color::White);
 
         Logger::getLogger().log(Logger::LogLevel::INFO, "Add node at (%f, %f)", node.getPosition().x, node.getPosition().y);
-        if(isNonOverlapping(node, nodes, NODE_RADIUS * 4)){
+        if(isNonOverlapping(node, nodes, CONFIG::NODE_RADIUS * 4)){
             nodes.push_back(node);
         }
     }
+}
 
-    // // 使用网格来布局节点
-    // int gridSize = std::sqrt(NNum) + 1;
-    // float spacing = (2 * innerRadius) / gridSize; // 网格间距
-    // int count = 0;
+void Shard::addMessage(int from, int to){
+    if(from < 0 || from >= nodes.size() || to < 0 || to >= nodes.size()){
+        Logger::getLogger().log(Logger::LogLevel::ERROR, "Invalid message from %d to %d", from, to);
+        return;
+    }
 
-    // for(int i = 0; i < gridSize; i++){
-    //     for(int j = 0; j < gridSize; j++){
-    //         Node node = Node(
-    //             center.x + (i + 0.5f) * spacing - innerRadius,
-    //             center.y + (j + 0.5f) * spacing - innerRadius,
-    //             NODE_RADIUS,
-    //             sf::Color::White
-    //         );
+    messages.push_back(Message(nodes[from], nodes[to]));
+    Logger::getLogger().log(Logger::LogLevel::INFO, "Add Intra-Shard message from (%f, %f) to (%f, %f)", nodes[from].getPosition().x, nodes[from].getPosition().y, nodes[to].getPosition().x, nodes[to].getPosition().y);
+}
 
-    //         if(count == 0){
-    //             node.setColor(sf::Color::Yellow);
-    //         }
-    //         nodes.push_back(node);
-
-    //         count ++;
-    //         if(count >= NNum){
-    //             return;
-    //         }
-    //     }
-    // }
+void Shard::update(sf::Time dt){
+    // 更新所有消息
+    messages.erase(std::remove_if(messages.begin(), messages.end(), [&](Message& message){
+        // 删除传递完成的消息
+        return message.update(dt);
+    }), messages.end());
 }

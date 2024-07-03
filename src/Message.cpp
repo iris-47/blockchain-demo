@@ -1,4 +1,5 @@
-#include "Message.hpp"
+#include "Struct.hpp"
+#include "config.h"
 
 bool Message::update(sf::Time dt){
     // 更新粒子效果
@@ -13,7 +14,7 @@ bool Message::update(sf::Time dt){
     //     }), particles.end());
     // }
 
-    // 更新消息进度
-    _progress += dt.asSeconds() * 0.3f; 
+    // 更新消息走的进度, 所有消息存在时间固定，距离越快速度越快
+    _progress += dt.asSeconds() * CONFIG::MESSAGE_SPEED; 
     return _progress >= 1.0f;
 }

@@ -60,5 +60,18 @@ void Renderer::renderShards() const{
         for(auto &node: shard.nodes){
             renderNode(node);
         }
+        
+        // 绘制分片内消息
+        for(auto &message: shard.messages){
+            // 绘制消息传递的进度点
+            sf::CircleShape messageDot(5.f);
+            messageDot.setFillColor(ColorMap::getColor(message._type));
+
+            sf::Vector2f messagePosition = message.getStart() + (message.getEnd() - message.getStart()) * message.getProgress();
+            messageDot.setPosition(messagePosition - sf::Vector2f(messageDot.getRadius(), messageDot.getRadius()));
+
+            _scene.draw(messageDot);
+            Logger::getLogger().log(Logger::LogLevel::INFO, "Render Intra-Shard message at (%f, %f)", messagePosition.x, messagePosition.y);
+        }
     }
 }
