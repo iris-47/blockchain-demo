@@ -11,6 +11,7 @@ const float NODE_RADIUS = 10.f; // 节点半径
 
 // message related
 const float MESSAGE_SPEED = 0.3f; // 消息传递速度
+const float MESSAGE_GAP = 1.f; // 消息之间的间隔
 } // namespace CONFIG
 
 

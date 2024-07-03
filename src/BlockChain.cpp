@@ -35,6 +35,9 @@ void BlockChain::start(){
     shards[0].addMessage(0, 1);
     shards[0].addMessage(1, 2);
 
+    // shards[1].PBFT();
+    shards[1].broadcastMessage(0);
+
     _running = true;
 }
 

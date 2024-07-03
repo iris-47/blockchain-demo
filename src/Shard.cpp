@@ -43,21 +43,35 @@ Shard::Shard(int NNum, sf::Vector2f center){
         float y = center.y + r * std::sin(theta);
         Node node = Node(x, y, CONFIG::NODE_RADIUS,sf::Color::White);
 
-        Logger::getLogger().log(Logger::LogLevel::INFO, "Add node at (%f, %f)", node.getPosition().x, node.getPosition().y);
+        Logger::getLogger().log(Logger::LogLevel::INFO, "%d:Add node at (%f, %f)",  __LINE__, node.getPosition().x, node.getPosition().y);
         if(isNonOverlapping(node, nodes, CONFIG::NODE_RADIUS * 4)){
             nodes.push_back(node);
         }
     }
 }
 
-void Shard::addMessage(int from, int to){
+void Shard::addMessage(int from, int to, MessageType type){
     if(from < 0 || from >= nodes.size() || to < 0 || to >= nodes.size()){
-        Logger::getLogger().log(Logger::LogLevel::ERROR, "Invalid message from %d to %d", from, to);
+        Logger::getLogger().log(Logger::LogLevel::ERROR, "%d:Invalid message from %d to %d", __LINE__, from, to);
         return;
     }
 
     messages.push_back(Message(nodes[from], nodes[to]));
-    Logger::getLogger().log(Logger::LogLevel::INFO, "Add Intra-Shard message from (%f, %f) to (%f, %f)", nodes[from].getPosition().x, nodes[from].getPosition().y, nodes[to].getPosition().x, nodes[to].getPosition().y);
+    Logger::getLogger().log(Logger::LogLevel::INFO, "%d:Add Intra-Shard message from (%f, %f) to (%f, %f)", __LINE__, nodes[from].getPosition().x, nodes[from].getPosition().y, nodes[to].getPosition().x, nodes[to].getPosition().y);
+}
+
+void Shard::broadcastMessage(int from, MessageType type){
+    if(from < 0 || from >= nodes.size()){
+        Logger::getLogger().log(Logger::LogLevel::ERROR, "%d:Invalid index %d!", __LINE__, from);
+        return;
+    }
+
+    for(int i = 0; i < nodes.size(); i++){
+        if(i != from){
+            messages.push_back(Message(nodes[from], nodes[i]));
+            Logger::getLogger().log(Logger::LogLevel::INFO, "%d:Add Intra-Shard message from (%f, %f) to (%f, %f)", __LINE__, nodes[from].getPosition().x, nodes[from].getPosition().y, nodes[i].getPosition().x, nodes[i].getPosition().y);
+        }
+    }
 }
 
 void Shard::update(sf::Time dt){

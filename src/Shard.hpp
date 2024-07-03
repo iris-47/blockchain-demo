@@ -18,7 +18,8 @@ public:
     Shard(int NNum, sf::Vector2f center);
 
 
-    void addMessage(int from, int to);
+    void addMessage(int from, int to, MessageType type = MessageType::DEFAULT);
+    void broadcastMessage(int from, MessageType type = MessageType::DEFAULT);
 
     void PBFT(); // PBFT共识算法演示
     
