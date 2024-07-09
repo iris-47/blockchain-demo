@@ -71,7 +71,7 @@ void Renderer::renderShards() const{
             messageDot.setPosition(messagePosition - sf::Vector2f(messageDot.getRadius(), messageDot.getRadius()));
 
             _scene.draw(messageDot);
-            Logger::getLogger().log(Logger::LogLevel::INFO, "Render Intra-Shard message at (%f, %f)", messagePosition.x, messagePosition.y);
+            // Logger::getLogger().log(Logger::LogLevel::INFO, "Render Intra-Shard message at (%f, %f)", messagePosition.x, messagePosition.y);
         }
     }
 }

@@ -1,11 +1,23 @@
 #include "BlockChain.hpp"
 #include <cmath>
 
-BlockChain::BlockChain(): nodes(std::vector<Node>()), _running(true), _speed(1.0f){}
 
-// 所有Node向右移动
 void BlockChain::update(sf::Time dt){
     if(!_running) return;
+
+    // 更新Timer, 由于Timer调用的callback中会新增timers, 因此使用remove_if()的方式会导致错误，还是回归朴实吧
+    // 那remove_if()还有啥优势？？？
+    if(timers.size() > 0){
+        for(int i = 0;i < timers.size();i++){
+            timers[i].update(dt);
+            if(timers[i].isExpired()){
+                Logger::getLogger().log(Logger::LogLevel::INFO, "%d:Timer expired", __LINE__);
+                timers[i].invokeCallback();
+                timers.erase(timers.begin() + i);
+                i--;
+            }
+        }
+    }
 
     // 更新所有消息
     messages.erase(std::remove_if(messages.begin(), messages.end(), [&](Message& message){
@@ -20,27 +32,45 @@ void BlockChain::update(sf::Time dt){
 }
 
 void BlockChain::start(){
-    addNode(Node(0, 0, 10, sf::Color::White));
-    addNode(Node(100, 100, 10, sf::Color::Red));
-    addNode(Node(200, 200, 10, sf::Color::Green));
-    addNode(Node(300, 300, 10, sf::Color::Blue));
+    clear();
+    addNode(Node(800, 200, 20, sf::Color::Cyan));
 
-    addMessage(Message(nodes[0], nodes[1]));
-    addMessage(Message(nodes[1], nodes[2]));
-    addMessage(Message(nodes[2], nodes[3]));
+    addShard(6, sf::Vector2f(200, 500));
+    addShard(6 , sf::Vector2f(800, 700));
+    addShard(6 , sf::Vector2f(554, 864));
+    addShard(6 , sf::Vector2f(1078, 753));
+    addShard(6 , sf::Vector2f(922, 386));
+    addShard(6 , sf::Vector2f(75, 125));
 
-    addShard(10, sf::Vector2f(500, 500));
-    addShard(6 , sf::Vector2f(700, 700));
+    addMessage(Message(nodes[0], shards[0].nodes[0], MessageType::PROPOSE));
+    addMessage(Message(nodes[0], shards[1].nodes[0], MessageType::PROPOSE));
+    addMessage(Message(nodes[0], shards[2].nodes[0], MessageType::PROPOSE));
 
-    shards[0].addMessage(0, 1);
-    shards[0].addMessage(1, 2);
+    std::vector<int> shards_to_invoke;
+    float interval = 1.0f / CONFIG::MESSAGE_SPEED + CONFIG::MESSAGE_GAP;
 
-    // shards[1].PBFT();
-    shards[1].broadcastMessage(0);
+    shards_to_invoke.push_back(0);
+    shards_to_invoke.push_back(1);
+    shards_to_invoke.push_back(2);
+    
+    timers.emplace_back(interval, std::bind(&BlockChain::invokePBFTs, this, shards_to_invoke));
+    
+    timers.emplace_back(interval * 4, std::bind(&BlockChain::temp, this));
 
     _running = true;
 }
 
+void BlockChain::clear(){
+    nodes.clear();
+    messages.clear();
+    shards.clear();
+    timers.clear();
+}
+
 void BlockChain::pause(){
-    _running = false;
+    if(_running){
+        _running = false;
+    }else{
+        _running = true;
+    }
 }

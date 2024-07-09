@@ -1,7 +1,9 @@
 #ifndef NODE_HPP
 #define NODE_HPP
 #include <SFML/Graphics.hpp>
+#include <functional>
 #include "config.h"
+#include "Logger.hpp"
 
 // the node draw in the screen
 class Node {
@@ -48,12 +50,16 @@ private:
 
     MessageType _type;
 
+    sf::Color _color;
+
 public:
     Message(Node& from, Node& to, MessageType type = MessageType::DEFAULT):
         _progress(0.0f),
         _start(from.getPosition()),
         _end(to.getPosition()),
         _type(type){}
+
+    void setColor(sf::Color color){_color = color;}
 
     sf::Vector2f getStart(){return _start;}
     sf::Vector2f getEnd(){return _end;}
@@ -70,6 +76,48 @@ public:
     // void disableParticleEffect(){useParticleEffect = false;}
 };
 
+
+/// @brief 计时器类, 以秒为单位
+class Timer{
+public:
+    Timer(): _interval(0.0f), _elapsed(0.0f), _active(false), _callback(nullptr){}
+    Timer(float interval) : _interval(interval), _elapsed(0.0f), _active(false) {}
+
+    // 注意这个构造函数对应active为true
+    Timer(float interval, std::function<void()> callback) : _interval(interval), _elapsed(0.0f), _active(true), _callback(callback) {}
+
+    // 清空计时器并开始计时
+    void start(float interval){
+        _elapsed = 0.0f;
+        _interval = interval;
+        _active = true;
+    }
+
+    void stop(){_active = false;}
+
+    void update(sf::Time dt){if(_active) _elapsed += dt.asSeconds();}
+
+    bool isExpired(){
+        if(_elapsed >= _interval){
+            return true;
+        }
+        return false;
+    }
+
+    void invokeCallback(){
+        if(_callback){
+            _callback();
+        }
+    }
+    
+private:
+    std::function<void()> _callback;
+
+    bool _active;
+
+    float _interval;
+    float _elapsed;
+};
 
 
 #endif

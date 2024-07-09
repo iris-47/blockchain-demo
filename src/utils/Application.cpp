@@ -40,10 +40,10 @@ void Application::run() {
         }
 
         sf::Time dt = clock.restart();
-        if (dt > sf::seconds(0.02f)) {
-            Logger::getLogger().log(Logger::LogLevel::DEBUG, "Frame time too long: " + std::to_string(dt.asSeconds()) + "s");
-            continue;
-        }
+        // if (dt > sf::seconds(0.02f)) {
+        //     Logger::getLogger().log(Logger::LogLevel::DEBUG, "Frame time too long: " + std::to_string(dt.asSeconds()) + "s");
+        //     continue;
+        // }
 
         update(dt);
         ImGui::SFML::Update(_window, dt);
