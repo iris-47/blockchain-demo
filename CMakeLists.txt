@@ -1,13 +1,84 @@
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.5)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_BUILD_TYPE Release)
+project(Demo VERSION 0.1 LANGUAGES CXX)
 
-project(BlockchainDemo)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_subdirectory(thirdparty)
-add_subdirectory(src)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+set(PROJECT_SOURCES
+        main.cpp
+        mainwindow.cpp
+        mainwindow.h
+        mainwindow.ui
+)
+
+set(CMAKE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+include_directories(${CMAKE_SOURCE_DIR})
+
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(Demo
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET Demo APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+else()
+    if(ANDROID)
+        add_library(Demo SHARED
+            ${PROJECT_SOURCES}
+        )
+# Define properties for Android with Qt 5 after find_package() calls as:
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+        add_executable(Demo
+            ${PROJECT_SOURCES}
+            pages/animationwidget.h pages/animationwidget.cpp pages/animationwidget.ui
+            pages/settingwidget.h pages/settingwidget.cpp pages/settingwidget.ui
+            pages/animation/graphicsview.h pages/animation/graphicsview.cpp
+
+            pages/animation/animationscene.h pages/animation/animationscene.cpp
+            pages/animation/struct.h
+
+            pages/animation/shard.h pages/animation/shard.cpp
+            config.h
+
+
+        )
+    endif()
+endif()
+
+target_link_libraries(Demo PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+if(${QT_VERSION} VERSION_LESS 6.1.0)
+  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.Demo)
+endif()
+set_target_properties(Demo PROPERTIES
+    ${BUNDLE_ID_OPTION}
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+include(GNUInstallDirs)
+install(TARGETS Demo
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(Demo)
+endif()
