@@ -1,6 +1,7 @@
 #include "shard.h"
 #include "config.h"
-#include <random>
+#include "animationscene.h"
+#include <QRandomGenerator>
 #include <QTimer>
 #include <QtMath>
 #include <QDebug>
@@ -40,15 +41,14 @@ Shard::Shard(qreal x, qreal y, int nnm, QColor color) :
     qreal innerRadius = m_radius - nodeRadius - CONFIG::SHARD_BORDER; // 减去节点半径和边缘间距
 
     // 随机布局节点
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<qreal> dis(0, 1);
+    QRandomGenerator *generator = QRandomGenerator::global();
+    qreal r = innerRadius * std::sqrt(generator->bounded(1.0));
+    qreal angle = 2 * M_PI * generator->bounded(1.0);
 
-    qreal r = innerRadius * std::sqrt(dis(gen));
-    qreal angle = 2 * M_PI * dis(gen);
     qreal node_center_x = rect().center().x() + r * std::cos(angle);
     qreal node_center_y = rect().center().y() + r * std::sin(angle);
     Node* node = new Node(0, 0, nodeRadius, Qt::darkCyan);
+    node->setShard(this);
 
     group->addToGroup(node);
     node->setPos(node_center_x - nodeRadius, node_center_y - nodeRadius);
@@ -57,8 +57,8 @@ Shard::Shard(qreal x, qreal y, int nnm, QColor color) :
 
     // 节点类的坐标是左上角，所以转换得有点扭曲。。。
     while(nodes.size() < nnm) {
-        qreal r = innerRadius * std::sqrt(dis(gen));
-        qreal angle = 2 * M_PI * dis(gen);
+        qreal r = innerRadius * std::sqrt(generator->bounded(1.0));
+        qreal angle = 2 * M_PI * generator->bounded(1.0);
         qreal node_center_x = rect().center().x() + r * std::cos(angle);
         qreal node_center_y = rect().center().y() + r * std::sin(angle);
         if(isNonOverlapping(node_center_x, node_center_y, nodes, CONFIG::NODE_RADIUS * 4)){
@@ -140,6 +140,10 @@ void Shard::handleMessage(Node* node, Message* message) {
     }
 
     switch (message->mtype) {
+        case MessageType::PROPOSE:
+            node->setBrush(ColorMap::getColor(message->mtype));
+            broadcastMessage(node, MessageType::PRE_PREPARE);
+            break;
         case MessageType::PRE_PREPARE:
             node->setBrush(ColorMap::getColor(message->mtype));
             broadcastMessage(node, MessageType::PREPARE);
@@ -162,7 +166,13 @@ void Shard::handleMessage(Node* node, Message* message) {
                 }
             }
             break;
+        case MessageType::VERIFIED:
+            qDebug() << "Message verified!";
+            // node->setBrush(ColorMap::getColor(message->mtype));
+            break;
+
         default:
+            qDebug() << "Unknown message type!";
             break;
     }
 }
@@ -180,7 +190,6 @@ void Shard::consensusDone(){
 
     //删除所有消息
     for(int i = 0; i < messages.size(); i++){
-        qDebug() << "remove message " << i;
         group->removeFromGroup(messages[i]);
         delete messages[i];
     }
@@ -194,6 +203,8 @@ void Shard::consensusDone(){
 }
 
 void Shard::reply(){
+    m_belongScene->shardReply(this);
+
     if(replyAnimationTimer.isActive()){
         replyAnimationTimer.stop();
     }

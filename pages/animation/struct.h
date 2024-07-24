@@ -7,6 +7,8 @@
 
 #include <QDebug>
 
+class Shard;
+
 enum MessageType{
     // DEFAULT
     DEFAULT,
@@ -71,11 +73,15 @@ public:
         setFlag(QGraphicsItem::ItemIsSelectable);
     }
 
+    void setShard(Shard* shard) {m_belongShard = shard;}
+    Shard* getShard() {return m_belongShard;}
+
     void setColor(QColor color) { m_color = color; }
     void reset() { m_prepareCnt = m_commitCnt = 0; setBrush(Qt::white);}
 
 private:
     QColor m_color;
+    Shard* m_belongShard;
 
     int m_prepareCnt;
     int m_commitCnt;
@@ -83,9 +89,17 @@ private:
 
 class Message : public QGraphicsEllipseItem {
 public:
+    Message(qreal size=3, MessageType mtype = MessageType::DEFAULT, QGraphicsItem* parent = nullptr):
+        QGraphicsEllipseItem(parent), mtype(mtype)
+    {
+        setRect(0, 0, size * 2, size * 2);
+        setBrush(ColorMap::getColor(mtype));
+    }
+
     /// @param from 起始中心点
     /// @param to 目标中心点
     Message(Node* from, Node* to, qreal size=3 , MessageType mtype = MessageType::DEFAULT, QGraphicsItem* parent = nullptr) :
+    // Message(Node* from, Node* to, qreal size=3 , MessageType mtype = MessageType::DEFAULT, QGraphicsItem* parent = nullptr) :
         QGraphicsEllipseItem(parent)
         , target(to),  mtype(mtype)
         , targetp(to->pos() + to->boundingRect().center())

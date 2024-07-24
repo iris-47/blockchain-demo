@@ -50,8 +50,6 @@ else()
 
             pages/animation/shard.h pages/animation/shard.cpp
             config.h
-
-
         )
     endif()
 endif()

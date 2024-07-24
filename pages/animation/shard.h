@@ -5,11 +5,14 @@
 #include <QTimer>
 #include "struct.h"
 
+class AnimationScene;
+
 // TODO: 尝试换一个东西继承，而不是继承QGraphicsEllipseItem
 class Shard : public QObject, public QGraphicsEllipseItem
 {
-    Q_OBJECT
     friend class AnimationScene;
+    friend class AnimationWidget;
+    Q_OBJECT
 public:
     Shard();
     Shard(qreal x, qreal y, int nnm, QColor color = Qt::black);
@@ -30,6 +33,8 @@ public slots:
 
 private:
     qreal m_radius;
+
+    AnimationScene* m_belongScene;
 
     QGraphicsItemGroup *group; // 所有Item应该加入到group中，方便拖动
     QVector <Node*> nodes;
