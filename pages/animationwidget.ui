@@ -34,9 +34,16 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="startBtn">
         <property name="text">
          <string>start</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="resetBtn">
+        <property name="text">
+         <string>reset</string>
         </property>
        </widget>
       </item>

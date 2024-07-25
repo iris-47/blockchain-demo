@@ -3,6 +3,7 @@
 
 #include <QGraphicsEllipseItem>
 #include <QTimer>
+#include <QMutex>
 #include "struct.h"
 
 class AnimationScene;
@@ -23,6 +24,7 @@ public:
     void broadcastMessage(int from, MessageType mtype = MessageType::DEFAULT);
 
     void updateMessages();
+    void resetShard();
 
     void handleMessage(Node* node, Message* message);
     void startPBFT();
@@ -30,6 +32,7 @@ public:
 
 public slots:
     void reply();
+    void resetSlot();
 
 private:
     qreal m_radius;
@@ -39,8 +42,9 @@ private:
     QGraphicsItemGroup *group; // 所有Item应该加入到group中，方便拖动
     QVector <Node*> nodes;
     QVector <Message*> messages;
+    QMutex messages_mutex; // 用于reset时的 messages 保护
 
-    Node* m_mainNode;
+    Node* m_mainNode; // 主节点
 
     QTimer consensusTimer;
     QTimer replyAnimationTimer;

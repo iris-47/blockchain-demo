@@ -109,15 +109,23 @@ void Shard::broadcastMessage(int from, MessageType mtype) {
 }
 
 void Shard::updateMessages() {
+    QMutexLocker locker(&messages_mutex);
+
     for (int i = 0; i < messages.size(); ++i) {
-        QPointF end = messages[i]->targetp;
-        QPointF currentPos = messages[i]->pos();
+        // 应对所有messages被清空的情况
+        if(i >= messages.size()){
+            return;
+        }
+        Message* msg = messages[i];
+        QPointF end = msg->targetp;
+        QPointF currentPos = msg->pos();
         QVector2D direction(end - currentPos);
         // 如果消息已经到达终点
         if (QVector2D(currentPos - end).length() < m_speed) {
-            handleMessage(messages[i]->target, messages[i]);
+            handleMessage(msg->target, msg);
 
             // handleMessage中可能删除所有消息
+            // TODO: 这个解决方式很操蛋且不具有普遍性，考虑换一种方法。
             if(messages.size() == 0){
                 return;
             }
@@ -177,27 +185,28 @@ void Shard::handleMessage(Node* node, Message* message) {
     }
 }
 
+// PBFT开始
 void Shard::startPBFT() {
     broadcastMessage(0, MessageType::PRE_PREPARE);
 }
 
+// PBFT完成
 void Shard::consensusDone(){
-    setBrush(Qt::green);
     if(replyAnimationTimer.isActive()){
         replyAnimationTimer.stop();
     }
     replyAnimationTimer.start(CONFIG::REPLY_ANIMATION_INTERVAL);
 
-    //删除所有消息
+    // 删除消息
     for(int i = 0; i < messages.size(); i++){
         group->removeFromGroup(messages[i]);
         delete messages[i];
     }
-
     messages.clear();
 
+    setBrush(Qt::green);
     for(int i = 0;i < nodes.size();i++){
-        nodes[i]->reset();
+        // nodes[i]->reset();
         nodes[i]->setVisible(false);
     }
 }
@@ -205,11 +214,37 @@ void Shard::consensusDone(){
 void Shard::reply(){
     m_belongScene->shardReply(this);
 
+    resetShard();
+}
+
+// 重置Shard为初始化状态
+void Shard::resetShard(){
+    // 删除消息
+    for(int i = 0; i < messages.size(); i++){
+        group->removeFromGroup(messages[i]);
+        delete messages[i];
+    }
+    messages.clear();
+
+    // 重置节点
+    for(int i = 0; i < nodes.size(); i++){
+        nodes[i]->reset();
+    }
+
+    // 关闭Timer
     if(replyAnimationTimer.isActive()){
         replyAnimationTimer.stop();
     }
+
+    // 显示节点
     for(int i = 0;i < nodes.size();i++){
         nodes[i]->setVisible(true);
     }
     setBrush(Qt::transparent);
+}
+
+void Shard::resetSlot(){
+    QMutexLocker locker(&messages_mutex);
+
+    resetShard();
 }

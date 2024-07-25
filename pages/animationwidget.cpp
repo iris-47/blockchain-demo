@@ -11,13 +11,15 @@ AnimationWidget::AnimationWidget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    scene->initScene();
 
-    scene->sendMessage(scene->shards[0]->nodes[0], scene->shards[1], MessageType::PROPOSE);
-    scene->sendMessage(scene->shards[0]->nodes[0], scene->shards[3], MessageType::PROPOSE);
+    scene->initScene();
+    connect(ui->startBtn, &QPushButton::clicked, scene, &AnimationScene::startDemo);
+    connect(ui->resetBtn, &QPushButton::clicked, scene, &AnimationScene::resetScene);
+
+    scene->startDemo();
+
     // ui->graphicsView = new GraphicsView(scene);
     ui->graphicsView->setScene(scene);
-
 }
 
 AnimationWidget::~AnimationWidget()

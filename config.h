@@ -4,6 +4,8 @@
 
 namespace CONFIG
 {
+const int FRAME_RATE = 30; // 帧率
+
 // shard related
 const qreal RADIUS_RATE = 30.f; // 分片最大半径与片内节点个数的关系
 const qreal SHARD_BORDER = 10.f; // 分片边界宽度

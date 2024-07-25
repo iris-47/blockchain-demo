@@ -30,8 +30,9 @@ public:
     void sendMessage(Shard* from, Node* to, MessageType mtype = MessageType::DEFAULT);
     void shardReply(Shard* from);
 
-    void updateNodes();
+    void startDemo();
     void updateScene();
+    void resetScene();
 
     void setSpeed(qreal speed) { m_speed = speed; }
 
@@ -44,7 +45,10 @@ private:
     QVector<Shard*> shards;
     QTimer *timer;
 
+    QMutex messages_mutex; // 用于reset时的 messages 保护
     qreal m_speed;
+
+    bool m_running;
 };
 
 #endif // ANIMATIONSCENE_H

@@ -4,11 +4,10 @@
 #include <QDebug>
 
 AnimationScene::AnimationScene(QObject *parent)
-    : QGraphicsScene{parent}, timer{new QTimer{this}}
+    : QGraphicsScene{parent}, timer{new QTimer{this}}, m_running{false}
 {
     connect(timer, &QTimer::timeout, this, &AnimationScene::updateScene);
     m_speed = CONFIG::MESSAGE_SPEED;
-    timer->start(1000/30);
 }
 
 void AnimationScene::initScene(){
@@ -20,6 +19,51 @@ void AnimationScene::initScene(){
     addShard(270, -200, 10);
     addShard(-400, -200, 8);
 }
+
+void AnimationScene::updateScene(){
+    for(int i = 0;i < shards.size();i++){
+        shards[i]->updateMessages();
+    }
+
+    updateMessages();
+}
+
+void AnimationScene::resetScene(){
+    QMutexLocker locker(&messages_mutex);
+    for(int i = 0;i < shards.size();i++){
+        shards[i]->resetShard();
+    }
+
+    for(int i = 0;i < messages.size();i++){
+        removeItem(messages[i]);
+        delete messages[i];
+    }
+
+    messages.clear();
+
+    // 关闭Timer
+    if(timer->isActive()){
+        timer->stop();
+    }
+
+    m_running = false;
+}
+
+void AnimationScene::startDemo(){
+    if(m_running == false){
+        sendMessage(shards[0]->nodes[0], shards[1], MessageType::PROPOSE);
+        sendMessage(shards[0]->nodes[0], shards[3], MessageType::PROPOSE);
+        m_running = true;
+    }
+
+    if(timer->isActive()){
+        timer->stop();
+    }else{
+        timer->start(1000/CONFIG::FRAME_RATE);
+    }
+}
+
+
 
 void AnimationScene::addNode(qreal x, qreal y, qreal r, QColor color)
 {
@@ -74,6 +118,9 @@ void AnimationScene::shardReply(Shard* shard){
 }
 
 void AnimationScene::updateMessages() {
+    // 为 messages添加互斥锁
+    QMutexLocker locker(&messages_mutex);
+
     for (int i = 0; i < messages.size(); ++i) {
         QPointF end = messages[i]->targetp;
         QPointF currentPos = messages[i]->pos();
@@ -103,12 +150,4 @@ void AnimationScene::addShard(qreal x, qreal y, int nnm, QColor color){
 
     addItem(shard->group); // 作为整体添加
     shard->group->setPos(x, y);
-}
-
-void AnimationScene::updateScene(){
-    for(int i = 0;i < shards.size();i++){
-        shards[i]->updateMessages();
-    }
-
-    updateMessages();
 }
