@@ -51,6 +51,7 @@ void AnimationScene::resetScene(){
 
 void AnimationScene::startDemo(){
     if(m_running == false){
+        resetScene();
         sendMessage(shards[0]->nodes[0], shards[1], MessageType::PROPOSE);
         sendMessage(shards[0]->nodes[0], shards[3], MessageType::PROPOSE);
         m_running = true;
@@ -62,8 +63,6 @@ void AnimationScene::startDemo(){
         timer->start(1000/CONFIG::FRAME_RATE);
     }
 }
-
-
 
 void AnimationScene::addNode(qreal x, qreal y, qreal r, QColor color)
 {
@@ -144,7 +143,7 @@ void AnimationScene::updateMessages() {
 }
 
 void AnimationScene::addShard(qreal x, qreal y, int nnm, QColor color){
-    Shard *shard = new Shard{0, 0, nnm, color};
+    Shard *shard = new Shard{0, 0, nnm, shards.size(), color};
     shard->m_belongScene = this;
     shards.append(shard);
 

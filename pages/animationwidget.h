@@ -20,8 +20,14 @@ public:
 
 private:
     Ui::AnimationWidget *ui;
+    void onClickedStart();
+    void onClickReset();
+
+    void initConnections();
 
     AnimationScene *scene;
+
+    bool m_isRunning;
 };
 
 #endif // ANIMATIONWIDGET_H
