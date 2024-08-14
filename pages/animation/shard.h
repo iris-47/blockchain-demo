@@ -16,7 +16,7 @@ class Shard : public QObject, public QGraphicsEllipseItem
     Q_OBJECT
 public:
     Shard();
-    Shard(qreal x, qreal y, int nnm, QColor color = Qt::black);
+    Shard(qreal x, qreal y, int nnm, int index, QColor color = Qt::black);
 
     void sendMessage(Node* from, Node* to, MessageType mtype = MessageType::DEFAULT);
     void sendMessage(int from, int to, MessageType mtype = MessageType::DEFAULT);
@@ -27,7 +27,7 @@ public:
     void resetShard();
 
     void handleMessage(Node* node, Message* message);
-    void startPBFT();
+    void startPBFT(Node* node);
     void consensusDone();
 
 public slots:
@@ -49,6 +49,8 @@ private:
     QTimer consensusTimer;
     QTimer replyAnimationTimer;
     qreal m_speed;
+
+    int idx;
 };
 
 #endif // SHARD_H

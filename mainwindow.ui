@@ -31,16 +31,16 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="animationBtn">
          <property name="text">
-          <string>演示</string>
+          <string>演示界面</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="usageBtn">
          <property name="text">
-          <string>设置</string>
+          <string>使用教程</string>
          </property>
         </widget>
        </item>
@@ -68,36 +68,33 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
-         <property name="currentIndex">
-          <number>1</number>
+         <property name="minimumSize">
+          <size>
+           <width>1</width>
+           <height>0</height>
+          </size>
          </property>
-         <widget class="SettingWidget" name="settingPage"/>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="UsageWidget" name="usagePage"/>
          <widget class="AnimationWidget" name="viewPage"/>
         </widget>
        </item>
        <item>
-        <widget class="QWidget" name="InfoArea" native="true">
+        <widget class="LoggerWidget" name="loggerWidget" native="true">
          <property name="minimumSize">
           <size>
            <width>0</width>
-           <height>100</height>
+           <height>0</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>16777215</width>
-           <height>100</height>
+           <height>16777215</height>
           </size>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="text">
-             <string>这里会输出信息</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </widget>
        </item>
       </layout>
@@ -111,7 +108,7 @@
      <x>0</x>
      <y>0</y>
      <width>582</width>
-     <height>19</height>
+     <height>17</height>
     </rect>
    </property>
   </widget>
@@ -125,9 +122,15 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>SettingWidget</class>
+   <class>LoggerWidget</class>
    <extends>QWidget</extends>
-   <header>pages/settingwidget.h</header>
+   <header>pages/loggerwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>UsageWidget</class>
+   <extends>QWidget</extends>
+   <header>pages/usagewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

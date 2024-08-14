@@ -1,6 +1,8 @@
 #include "shard.h"
 #include "config.h"
 #include "animationscene.h"
+#include "utils/loggermanager.h"
+
 #include <QRandomGenerator>
 #include <QTimer>
 #include <QtMath>
@@ -20,9 +22,10 @@ bool isNonOverlapping(qreal x, qreal y, QVector<Node*> nodes, float minDistance)
 }
 
 Shard::Shard() {}
-Shard::Shard(qreal x, qreal y, int nnm, QColor color) :
+Shard::Shard(qreal x, qreal y, int nnm, int index, QColor color) :
     m_radius((std::sqrt(nnm) + 1) * CONFIG::RADIUS_RATE),
-    m_speed(CONFIG::INNER_MESSAGE_SPEED)
+    m_speed(CONFIG::INNER_MESSAGE_SPEED),
+    idx(index)
 {
     connect(&replyAnimationTimer, &QTimer::timeout, this, &Shard::reply);
 
@@ -150,7 +153,7 @@ void Shard::handleMessage(Node* node, Message* message) {
     switch (message->mtype) {
         case MessageType::PROPOSE:
             node->setBrush(ColorMap::getColor(message->mtype));
-            broadcastMessage(node, MessageType::PRE_PREPARE);
+            startPBFT(node);
             break;
         case MessageType::PRE_PREPARE:
             node->setBrush(ColorMap::getColor(message->mtype));
@@ -186,12 +189,16 @@ void Shard::handleMessage(Node* node, Message* message) {
 }
 
 // PBFT开始
-void Shard::startPBFT() {
-    broadcastMessage(0, MessageType::PRE_PREPARE);
+void Shard::startPBFT(Node* node) {
+    // 获取当前shard 的index
+    LoggerManager::getInstance().addLog("Shard " + QString::number(idx) + " start PBFT!");
+    broadcastMessage(node, MessageType::PRE_PREPARE);
 }
 
 // PBFT完成
 void Shard::consensusDone(){
+    LoggerManager::getInstance().addLog("Shard " + QString::number(idx) + " consensus done! now reply!");
+
     if(replyAnimationTimer.isActive()){
         replyAnimationTimer.stop();
     }

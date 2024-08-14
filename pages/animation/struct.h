@@ -50,6 +50,24 @@ public:
         // default
         return Qt::white;
     }
+
+    // 非常丑陋的妥协产物，请勿模仿
+    static QMap<MessageType, QColor> getColorMap(){
+        static const QMap<MessageType, QColor> colorMap = {
+                                                           {MessageType::DEFAULT, Qt::black},
+
+                                                           {MessageType::PROPOSE, Qt::red},
+                                                           {MessageType::PRE_PREPARE, Qt::magenta},
+                                                           {MessageType::PREPARE, Qt::yellow},
+                                                           {MessageType::COMMIT, Qt::green},
+
+                                                           {MessageType::VERIFY_REQUEST, QColor(0xFF00FF)}, // 紫色
+                                                           {MessageType::VERIFIED, Qt::green},
+                                                           {MessageType::BLOCK, Qt::blue},
+                                                           };
+
+        return colorMap;
+    }
 };
 
 class Node : public QGraphicsEllipseItem

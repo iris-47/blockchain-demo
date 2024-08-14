@@ -42,7 +42,7 @@ else()
         add_executable(Demo
             ${PROJECT_SOURCES}
             pages/animationwidget.h pages/animationwidget.cpp pages/animationwidget.ui
-            pages/settingwidget.h pages/settingwidget.cpp pages/settingwidget.ui
+
             pages/animation/graphicsview.h pages/animation/graphicsview.cpp
 
             pages/animation/animationscene.h pages/animation/animationscene.cpp
@@ -50,6 +50,12 @@ else()
 
             pages/animation/shard.h pages/animation/shard.cpp
             config.h
+            pages/animation/legenditem.h pages/animation/legenditem.cpp
+            res/icons.qrc
+            pages/loggerwidget.h pages/loggerwidget.cpp
+            utils/loggermanager.h utils/loggermanager.cpp
+            pages/usagewidget.h pages/usagewidget.cpp pages/usagewidget.ui
+
         )
     endif()
 endif()
