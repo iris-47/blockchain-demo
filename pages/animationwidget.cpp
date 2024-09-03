@@ -18,8 +18,8 @@ AnimationWidget::AnimationWidget(QWidget *parent)
     scene->addItem(legend);
     legend->setInitialPos(QPointF(-800, 0));
 
-    ui->startBtn->setIcon(QIcon(":/icons/start.png"));
-    ui->resetBtn->setIcon(QIcon(":/icons/reset.png"));
+    ui->startBtn->setIcon(QIcon(":/icons/pic/start.png"));
+    ui->resetBtn->setIcon(QIcon(":/icons/pic/reset.png"));
 
     initConnections();
 
@@ -39,16 +39,16 @@ void AnimationWidget::onClickedStart()
 {
     m_isRunning = !m_isRunning;
     if(m_isRunning){
-        ui->startBtn->setIcon(QIcon(":/icons/pause.png"));
+        ui->startBtn->setIcon(QIcon(":/icons/pic/pause.png"));
     }else{
-        ui->startBtn->setIcon(QIcon(":/icons/start.png"));
+        ui->startBtn->setIcon(QIcon(":/icons/pic/start.png"));
     }
     scene->startDemo();
 }
 
 void AnimationWidget::onClickReset(){
     m_isRunning = false;
-    ui->startBtn->setIcon(QIcon(":/icons/start.png"));
+    ui->startBtn->setIcon(QIcon(":/icons/pic/start.png"));
     scene->resetScene();
 }
 

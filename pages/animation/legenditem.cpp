@@ -18,14 +18,14 @@ LegendItem::LegendItem(QGraphicsItem *parent) : QGraphicsWidget(parent), m_isCol
     buttonLayout->addStretch(1);
 
     QPushButton* collapseButton = new QPushButton();
-    collapseButton->setIcon(QIcon(":/icons/collapse.png"));
+    collapseButton->setIcon(QIcon(":/icons/pic/collapse.png"));
     connect(collapseButton, &QPushButton::clicked, this, &LegendItem::toggleCollapse);
     QGraphicsProxyWidget* collapseProxy = new QGraphicsProxyWidget();
     collapseProxy->setWidget(collapseButton);
     buttonLayout->addItem(collapseProxy);
 
     QPushButton* closeButton = new QPushButton();
-    closeButton->setIcon(QIcon(":/icons/close.png"));
+    closeButton->setIcon(QIcon(":/icons/pic/close.png"));
     connect(closeButton, &QPushButton::clicked, this, &LegendItem::closeLegend);
     QGraphicsProxyWidget* closeProxy = new QGraphicsProxyWidget();
     closeProxy->setWidget(closeButton);
@@ -64,6 +64,7 @@ void LegendItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
     painter->drawRect(boundingRect());
 }
 
+// BUG: 崩溃
 void LegendItem::toggleCollapse(){
     m_isCollapsed = !m_isCollapsed;
     for (int i = 1; i < layout()->count(); ++i) {
