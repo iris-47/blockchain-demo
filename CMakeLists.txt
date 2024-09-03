@@ -55,6 +55,7 @@ else()
             pages/loggerwidget.h pages/loggerwidget.cpp
             utils/loggermanager.h utils/loggermanager.cpp
             pages/usagewidget.h pages/usagewidget.cpp pages/usagewidget.ui
+            pages/settingwidget.h pages/settingwidget.cpp
 
         )
     endif()

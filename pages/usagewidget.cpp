@@ -2,12 +2,13 @@
 #include "ui_usagewidget.h"
 
 #include <QVBoxLayout>
+#include <QPushButton>
 #include <QScrollArea>
 #include <QGroupBox>
 #include <QWidget>
 #include <QLabel>
 
-UsageWidget::UsageWidget(QWidget *parent)
+UsageWidget::UsageWidget(QStackedWidget *parent)
     : QWidget(parent)
     , ui(new Ui::UsageWidget)
 {
