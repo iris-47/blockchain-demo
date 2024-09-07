@@ -18,14 +18,14 @@ LegendItem::LegendItem(QGraphicsItem *parent) : QGraphicsWidget(parent), m_isCol
     buttonLayout->addStretch(1);
 
     QPushButton* collapseButton = new QPushButton();
-    collapseButton->setIcon(QIcon(":/icons/pic/collapse.png"));
+    collapseButton->setIcon(QIcon(":/icons/collapse.png"));
     connect(collapseButton, &QPushButton::clicked, this, &LegendItem::toggleCollapse);
     QGraphicsProxyWidget* collapseProxy = new QGraphicsProxyWidget();
     collapseProxy->setWidget(collapseButton);
     buttonLayout->addItem(collapseProxy);
 
     QPushButton* closeButton = new QPushButton();
-    closeButton->setIcon(QIcon(":/icons/pic/close.png"));
+    closeButton->setIcon(QIcon(":/icons/close.png"));
     connect(closeButton, &QPushButton::clicked, this, &LegendItem::closeLegend);
     QGraphicsProxyWidget* closeProxy = new QGraphicsProxyWidget();
     closeProxy->setWidget(closeButton);
