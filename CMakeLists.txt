@@ -51,11 +51,16 @@ else()
             pages/animation/shard.h pages/animation/shard.cpp
             config.h
             pages/animation/legenditem.h pages/animation/legenditem.cpp
-            res/icons.qrc
+
             pages/loggerwidget.h pages/loggerwidget.cpp
             utils/loggermanager.h utils/loggermanager.cpp
             pages/usagewidget.h pages/usagewidget.cpp pages/usagewidget.ui
-            pages/settingwidget.h pages/settingwidget.cpp
+
+            res/styles/styles.qrc
+            res/icon/icon.qrc
+            config.cpp
+            pages/settingwidget.h pages/settingwidget.cpp pages/settingwidget.ui
+            utils/multicombobox.h utils/multicombobox.cpp
 
         )
     endif()
