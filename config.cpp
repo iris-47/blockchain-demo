@@ -1,0 +1,18 @@
+#include "config.h"
+
+int CONFIG::FRAME_RATE = 30;
+
+int CONFIG::SHARD_NUM = 10;
+qreal CONFIG::RADIUS_RATE = 30.f;
+qreal CONFIG::SHARD_BORDER = 10.f;
+qreal CONFIG::NODE_RADIUS = 10.f;
+
+int CONFIG::START_INDEX = 0;
+QVector<int> CONFIG::END_INDEX = {1, 3};
+
+qreal CONFIG::MESSAGE_SIZE = 3.f;
+qreal CONFIG::MESSAGE_SPEED = 5.f;
+qreal CONFIG::INNER_MESSAGE_SPEED = 3.f;
+qreal CONFIG::REPLY_ANIMATION_INTERVAL = 800.0f;
+
+
