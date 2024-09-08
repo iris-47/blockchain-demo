@@ -191,13 +191,13 @@ void Shard::handleMessage(Node* node, Message* message) {
 // PBFT开始
 void Shard::startPBFT(Node* node) {
     // 获取当前shard 的index
-    LoggerManager::getInstance().addLog("Shard " + QString::number(idx) + " start PBFT!");
+    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 开始PBFT共识!");
     broadcastMessage(node, MessageType::PRE_PREPARE);
 }
 
 // PBFT完成
 void Shard::consensusDone(){
-    LoggerManager::getInstance().addLog("Shard " + QString::number(idx) + " consensus done! now reply!");
+    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 共识结束，开始发送Reply!");
 
     if(replyAnimationTimer.isActive()){
         replyAnimationTimer.stop();

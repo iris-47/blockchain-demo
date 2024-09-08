@@ -1,6 +1,7 @@
 #include "animationwidget.h"
 #include "ui_animationwidget.h"
 
+#include "loggerwidget.h"
 #include "animation/animationscene.h"
 
 #include <QPropertyAnimation>

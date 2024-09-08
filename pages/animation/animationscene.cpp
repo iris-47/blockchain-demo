@@ -1,4 +1,5 @@
 #include "animationscene.h"
+#include "utils/loggermanager.h""
 
 #include <QVector2D>
 #include <QDebug>
@@ -59,6 +60,8 @@ void AnimationScene::restartTimer(){
 
 void AnimationScene::startDemo(){
     if(m_running == false){
+        QString logger_msg = "开始演示，发送消息从分片" + QString::number(m_startShardIndex) + "到分片";
+
         resetScene();
         for(int i = 0;i < m_endShardIndex.size();i++){
             // TODO: 解决分片数量设置问题
@@ -67,7 +70,14 @@ void AnimationScene::startDemo(){
                 continue;
             }
             sendMessage(shards[m_startShardIndex]->nodes[0], shards[m_endShardIndex[i]], MessageType::PROPOSE);
+
+
+            logger_msg += QString::number(m_endShardIndex[i]);
+            if(i != m_endShardIndex.size() - 1){
+                logger_msg += "、";
+            }
         }
+        LoggerManager::getInstance().addLog(logger_msg);
         m_running = true;
     }
 

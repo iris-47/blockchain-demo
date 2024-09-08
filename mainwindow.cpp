@@ -14,8 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->setCurrentWidget(ui->viewPage);
 
     LoggerManager::getInstance().connectWidget(ui->loggerWidget);
-    LoggerManager::getInstance().addLog("MainWindow initial done1!");
-    LoggerManager::getInstance().addLog("MainWindow initial done2!");
+    LoggerManager::getInstance().addLog("初始化完成!");
 
     // 按钮切换页面
     connect(ui->animationBtn, &QPushButton::clicked, this, &MainWindow::onAnimationBtnClicked);
