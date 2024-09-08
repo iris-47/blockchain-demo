@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // connect(ui->menuAnimation, &QAction::triggered, this, &MainWindow::onAnimationBtnClicked);
     connect(ui->actionHelp, &QAction::triggered, this, &MainWindow::onUsageBtnClicked);
+
+    connect(ui->settingWidget, &SettingWidget::settingChanged, ui->viewPage, &AnimationWidget::onConfigChanged);
 }
 
 MainWindow::~MainWindow()
