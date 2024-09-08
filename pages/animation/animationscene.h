@@ -33,8 +33,10 @@ public:
     void startDemo();
     void updateScene();
     void resetScene();
+    void restartTimer();
 
-    void setSpeed(qreal speed) { m_speed = speed; }
+    void setSpeed();
+    void setConsensus();
 
 public slots:
     void updateMessages();
@@ -49,6 +51,9 @@ private:
     qreal m_speed;
 
     bool m_running;
+
+    int m_startShardIndex;
+    QVector<int> m_endShardIndex;
 };
 
 #endif // ANIMATIONSCENE_H

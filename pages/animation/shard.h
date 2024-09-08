@@ -30,6 +30,8 @@ public:
     void startPBFT(Node* node);
     void consensusDone();
 
+    void setSpeed(qreal speed) { m_speed = speed; }
+
 public slots:
     void reply();
     void resetSlot();

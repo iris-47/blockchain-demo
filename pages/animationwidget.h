@@ -18,6 +18,9 @@ public:
     explicit AnimationWidget(QWidget *parent = nullptr);
     ~AnimationWidget();
 
+public slots:
+    void onConfigChanged(int type);
+
 private:
     Ui::AnimationWidget *ui;
     void onClickedStart();

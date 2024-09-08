@@ -10,12 +10,18 @@ SettingWidget::SettingWidget(QWidget *parent)
     ui->setupUi(this);
 
     ui->frameRateCombo->setCurrentIndex(1);
+    connect(ui->frameRateCombo, &QComboBox::currentTextChanged, this, [=](){
+        CONFIG::FRAME_RATE = ui->frameRateCombo->currentText().chopped(4).toInt();
+        emit settingChanged(FPS_CHANGED);
+    });
 
     ui->intraMsgSpeedSlider->setMinimum(CONFIG::INNER_MESSAGE_SPEED * 0.2);
     ui->intraMsgSpeedSlider->setMaximum(CONFIG::INNER_MESSAGE_SPEED * 5);
     ui->intraMsgSpeedSlider->setValue(CONFIG::INNER_MESSAGE_SPEED);
     connect(ui->intraMsgSpeedSlider, &QSlider::valueChanged, this,  [=](int value){
         ui->intraMsgSpeedLabel->setText(QString::number(value));
+        CONFIG::INNER_MESSAGE_SPEED = ui->intraMsgSpeedSlider->value();
+        emit settingChanged(SPEED_CHANGED);
     });
 
     ui->interMsgSpeedSlider->setMinimum(CONFIG::MESSAGE_SPEED * 0.2);
@@ -23,6 +29,8 @@ SettingWidget::SettingWidget(QWidget *parent)
     ui->interMsgSpeedSlider->setValue(CONFIG::MESSAGE_SPEED);
     connect(ui->interMsgSpeedSlider, &QSlider::valueChanged, this, [=](int value){
         ui->interMsgSpeedLabel->setText(QString::number(value));
+        CONFIG::MESSAGE_SPEED = ui->interMsgSpeedSlider->value();
+        emit settingChanged(SPEED_CHANGED);
     });
 
     ui->startIndexSpin->setMinimum(0);
@@ -45,9 +53,6 @@ SettingWidget::~SettingWidget()
 
 void SettingWidget::applyChanges()
 {
-    CONFIG::FRAME_RATE = ui->frameRateCombo->currentText().chopped(4).toInt();
-    CONFIG::INNER_MESSAGE_SPEED = ui->intraMsgSpeedSlider->value();
-    CONFIG::MESSAGE_SPEED = ui->interMsgSpeedSlider->value();
     CONFIG::START_INDEX = ui->startIndexSpin->value();
     CONFIG::END_INDEX.clear();
     QStringList endList = ui->endIndexBox->currentText().split(";");
@@ -55,5 +60,5 @@ void SettingWidget::applyChanges()
         CONFIG::END_INDEX.push_back(endList[i].toInt());
     }
 
-    emit settingChanged();
+    emit settingChanged(SETTING_CHANGED);
 }

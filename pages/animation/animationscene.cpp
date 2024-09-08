@@ -8,6 +8,7 @@ AnimationScene::AnimationScene(QObject *parent)
 {
     connect(timer, &QTimer::timeout, this, &AnimationScene::updateScene);
     m_speed = CONFIG::MESSAGE_SPEED;
+    setConsensus();
 }
 
 void AnimationScene::initScene(){
@@ -49,11 +50,24 @@ void AnimationScene::resetScene(){
     m_running = false;
 }
 
+void AnimationScene::restartTimer(){
+    if(timer->isActive()){
+        timer->stop();
+        timer->start(1000/CONFIG::FRAME_RATE);
+    }
+}
+
 void AnimationScene::startDemo(){
     if(m_running == false){
         resetScene();
-        sendMessage(shards[0]->nodes[0], shards[1], MessageType::PROPOSE);
-        sendMessage(shards[0]->nodes[0], shards[3], MessageType::PROPOSE);
+        for(int i = 0;i < m_endShardIndex.size();i++){
+            // TODO: 解决分片数量设置问题
+            if(m_endShardIndex[i] > shards.size()){
+                qDebug() << "Invalid end shard index!";
+                continue;
+            }
+            sendMessage(shards[m_startShardIndex]->nodes[0], shards[m_endShardIndex[i]], MessageType::PROPOSE);
+        }
         m_running = true;
     }
 
@@ -149,4 +163,16 @@ void AnimationScene::addShard(qreal x, qreal y, int nnm, QColor color){
 
     addItem(shard->group); // 作为整体添加
     shard->group->setPos(x, y);
+}
+
+void AnimationScene::setSpeed(){
+    m_speed = CONFIG::MESSAGE_SPEED;
+    for(int i = 0;i < shards.size();i++){
+        shards[i]->setSpeed(CONFIG::INNER_MESSAGE_SPEED);
+    }
+}
+
+void AnimationScene::setConsensus(){
+    m_startShardIndex = CONFIG::START_INDEX;
+    m_endShardIndex = CONFIG::END_INDEX;
 }

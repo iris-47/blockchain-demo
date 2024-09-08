@@ -52,7 +52,25 @@ void AnimationWidget::onClickReset(){
     scene->resetScene();
 }
 
+void AnimationWidget::onConfigChanged(int type){
+    switch (type) {
+        case FPS_CHANGED:
+            scene->restartTimer();
+            break;
+        case SPEED_CHANGED:
+            scene->setSpeed();
+            break;
+        case SETTING_CHANGED:
+            onClickReset();
+            scene->setConsensus();
+        default:
+            break;
+    }
+}
+
 AnimationWidget::~AnimationWidget()
 {
     delete ui;
 }
+
+

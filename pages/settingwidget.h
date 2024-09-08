@@ -7,6 +7,7 @@ namespace Ui {
 class SettingWidget;
 }
 
+// URGENT TODO: 添加新增分片机制
 class SettingWidget : public QWidget
 {
     Q_OBJECT
@@ -16,7 +17,7 @@ public:
     ~SettingWidget();
 
 signals:
-    void settingChanged();
+    void settingChanged(int type);
 
 private:
     void applyChanges();

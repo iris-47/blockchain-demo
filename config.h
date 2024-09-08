@@ -2,22 +2,11 @@
 #define CONFIG_H
 #include <QVector>
 #include <QtGlobal>
-// namespace CONFIG
-// {
-// extern int FRAME_RATE; // 帧率
 
-// // shard related
-// extern int SHARD_NUM; // 分片个数
-// extern qreal RADIUS_RATE; // 分片最大半径与片内节点个数的关系
-// extern qreal SHARD_BORDER; // 分片边界宽度
-// extern qreal NODE_RADIUS; // 节点半径
+#define SETTING_CHANGED 0
+#define SPEED_CHANGED 1
+#define FPS_CHANGED 2
 
-// // message related
-// extern qreal MESSAGE_SIZE; // 消息半径
-// extern qreal MESSAGE_SPEED; // 片间消息传递速度
-// extern qreal INNER_MESSAGE_SPEED; // 片内消息传递速度
-// extern qreal REPLY_ANIMATION_INTERVAL; // 回复动画间隔(ms)
-// }
 class CONFIG
 {
 public:
