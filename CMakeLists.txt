@@ -50,7 +50,7 @@ else()
 
             pages/animation/shard.h pages/animation/shard.cpp
             config.h
-            pages/animation/legenditem.h pages/animation/legenditem.cpp
+
 
             pages/loggerwidget.h pages/loggerwidget.cpp
             utils/loggermanager.h utils/loggermanager.cpp
@@ -61,6 +61,8 @@ else()
             config.cpp
             pages/settingwidget.h pages/settingwidget.cpp pages/settingwidget.ui
             utils/multicombobox.h utils/multicombobox.cpp
+            utils/legendwidget.h utils/legendwidget.cpp
+
 
         )
     endif()

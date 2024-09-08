@@ -2,24 +2,24 @@
 #include "ui_animationwidget.h"
 
 #include "animation/animationscene.h"
-#include "animation/legenditem.h"
+
+#include <QPropertyAnimation>
 
 AnimationWidget::AnimationWidget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::AnimationWidget)
     , scene(new AnimationScene(this))
     , m_isRunning(false)
+    , m_legendVisible(false)
 {
     ui->setupUi(this);
 
-    LegendItem* legend = new LegendItem();
 
     scene->initScene();
-    scene->addItem(legend);
-    legend->setInitialPos(QPointF(-800, 0));
 
     ui->startBtn->setIcon(QIcon(":/icons/start.png"));
     ui->resetBtn->setIcon(QIcon(":/icons/reset.png"));
+    ui->legendBtn->setIcon(QIcon(":/icons/legend.png"));
 
     initConnections();
 
@@ -33,6 +33,7 @@ void AnimationWidget::initConnections()
 {
     connect(ui->startBtn, &QPushButton::clicked, this, &AnimationWidget::onClickedStart);
     connect(ui->resetBtn, &QPushButton::clicked, this, &AnimationWidget::onClickReset);
+    connect(ui->legendBtn, &QPushButton::clicked, this, &AnimationWidget::onClickLegendBtn);
 }
 
 void AnimationWidget::onClickedStart()
@@ -50,6 +51,23 @@ void AnimationWidget::onClickReset(){
     m_isRunning = false;
     ui->startBtn->setIcon(QIcon(":/icons/start.png"));
     scene->resetScene();
+}
+
+void AnimationWidget::onClickLegendBtn(){
+    LegendWidget* legend = ui->legendWidget;
+    // 隐藏图例，显示动画
+    if (m_legendVisible) {
+        // 隐藏图例并让 QGraphicsView 占据全部区域
+        ui->grahicsLayout->removeWidget(legend); // 从布局中移除 LegendWidget
+        legend->hide();
+        ui->legendBtn->setText("显示图例");
+    } else {
+        // 重新显示图例，QGraphicsView 让出位置
+        ui->grahicsLayout->addWidget(legend); // 将 LegendWidget 添加回布局
+        legend->show();
+        ui->legendBtn->setText("隐藏图例");
+    }
+    m_legendVisible = !m_legendVisible;
 }
 
 void AnimationWidget::onConfigChanged(int type){

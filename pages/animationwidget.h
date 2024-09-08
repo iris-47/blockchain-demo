@@ -25,12 +25,14 @@ private:
     Ui::AnimationWidget *ui;
     void onClickedStart();
     void onClickReset();
+    void onClickLegendBtn();
 
     void initConnections();
 
     AnimationScene *scene;
 
     bool m_isRunning;
+    bool m_legendVisible;
 };
 
 #endif // ANIMATIONWIDGET_H

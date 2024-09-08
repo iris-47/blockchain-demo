@@ -27,7 +27,20 @@
     <number>3</number>
    </property>
    <item>
-    <widget class="GraphicsView" name="graphicsView"/>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="grahicsLayout">
+        <item>
+         <widget class="GraphicsView" name="graphicsView"/>
+        </item>
+        <item>
+         <widget class="LegendWidget" name="legendWidget" native="true"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QWidget" name="widget" native="true">
@@ -66,6 +79,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="legendBtn">
+        <property name="text">
+         <string>隐藏图例</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -88,6 +108,12 @@
    <class>GraphicsView</class>
    <extends>QGraphicsView</extends>
    <header>pages/animation/graphicsview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>LegendWidget</class>
+   <extends>QWidget</extends>
+   <header>utils/legendwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
