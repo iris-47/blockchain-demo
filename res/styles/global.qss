@@ -557,3 +557,17 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
    background: none;
 }
+QSplitter::handle {
+    background-color: #D3D3D3;  /* 分割条背景颜色 */
+    margin: 0px;  /* 确保没有额外的外边距 */
+    padding: 0px;  /* 确保没有内边距 */
+    border: none;  /* 确保没有边框 */
+}
+
+QSplitter::handle:vertical {
+    width: 5px;  /* 垂直分割条宽度 */
+}
+
+QSplitter::handle:horizontal {
+    height: 5px;  /* 水平分割条高度 */
+}

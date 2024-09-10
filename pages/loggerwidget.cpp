@@ -13,7 +13,7 @@ void LoggerWidget::addText(const QString &text)
     QString current_date = current_date_time.toString("hh:mm:ss.zzz");
     label->setText(current_date + ": " + text);
 
-    label->setStyleSheet("QLabel { background-color : lightgray; color : black; padding: 5px; border-radius: 5px; }");
+    label->setStyleSheet("QLabel { background-color : lightgray; color : black; padding: 0px; border-radius: 5px; }");
 
     m_layout->insertWidget(0, label); // Insert new text at the top
 
