@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QMutex>
 
+// URGENT: 设置为调整大小
 class LoggerWidget : public QWidget
 {
     Q_OBJECT

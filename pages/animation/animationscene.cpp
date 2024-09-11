@@ -13,7 +13,9 @@ AnimationScene::AnimationScene(QObject *parent)
 }
 
 void AnimationScene::initScene(){
-    addShard(0, 0, 8, Qt::darkRed);
+    // 颜色#F70938
+
+    addShard(0, 0, 8, QColor(CONFIG::SHARD_COLOR));
 
     addShard(400, 250, 10);
     addShard(-400, 200, 6);

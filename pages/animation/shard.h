@@ -9,6 +9,7 @@
 class AnimationScene;
 
 // TODO: 尝试换一个东西继承，而不是继承QGraphicsEllipseItem
+// URGENT: 点击显示详细信息
 class Shard : public QObject, public QGraphicsEllipseItem
 {
     friend class AnimationScene;
@@ -32,6 +33,11 @@ public:
 
     void setSpeed(qreal speed) { m_speed = speed; }
 
+
+protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
+    QRectF boundingRect() const;
+
 public slots:
     void reply();
     void resetSlot();
@@ -51,6 +57,9 @@ private:
     QTimer consensusTimer;
     QTimer replyAnimationTimer;
     qreal m_speed;
+
+    QColor m_penColor;
+    QColor m_brushColor;
 
     int idx;
 };

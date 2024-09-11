@@ -1,9 +1,12 @@
 #include "shard.h"
 #include "config.h"
 #include "animationscene.h"
+#include "qstyleoption.h"
 #include "utils/loggermanager.h"
 
+#include <QGraphicsItem>
 #include <QRandomGenerator>
+#include <QPainter>
 #include <QTimer>
 #include <QtMath>
 #include <QDebug>
@@ -31,9 +34,11 @@ Shard::Shard(qreal x, qreal y, int nnm, int index, QColor color) :
 
     setRect(x, y, m_radius * 2, m_radius * 2);
 
-    QPen pen = QPen(color);
-    pen.setWidth(3);
-    setPen(pen);
+    m_penColor = color;
+    m_brushColor = Qt::transparent;
+    // QPen pen = QPen(color);
+    // pen.setWidth(3);
+    // setPen(pen);
 
     group = new QGraphicsItemGroup();
     group->addToGroup(this);
@@ -50,7 +55,7 @@ Shard::Shard(qreal x, qreal y, int nnm, int index, QColor color) :
 
     qreal node_center_x = rect().center().x() + r * std::cos(angle);
     qreal node_center_y = rect().center().y() + r * std::sin(angle);
-    Node* node = new Node(0, 0, nodeRadius, Qt::darkCyan);
+    Node* node = new Node(0, 0, nodeRadius, QColor(CONFIG::MAINNODE_COLOR));
     node->setShard(this);
 
     group->addToGroup(node);
@@ -254,4 +259,23 @@ void Shard::resetSlot(){
     QMutexLocker locker(&messages_mutex);
 
     resetShard();
+}
+
+void Shard::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
+    // 调用基类的绘制函数绘制圆形
+    QGraphicsEllipseItem::paint(painter, option, widget);
+
+    // 设置文本颜色和样式
+    painter->setPen(m_penColor);
+    QFont font = painter->font();
+    font.setPointSize(10);
+    painter->setFont(font);
+
+    // 在圆的下边绘制编号
+    painter->drawText(rect().center().x() - 40, rect().bottom() + 20, QString("Shard %1").arg(idx));
+}
+
+// 加上编号的范围
+QRectF Shard::boundingRect() const {
+    return rect().adjusted(0, 0, 0, 20);
 }

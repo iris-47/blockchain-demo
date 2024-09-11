@@ -21,6 +21,9 @@ public:
     static int START_INDEX;
     static QVector<int> END_INDEX;
 
+    static int SHARD_COLOR;
+    static int MAINNODE_COLOR;
+
     // message related
     static qreal MESSAGE_SIZE; // 消息半径
     static qreal MESSAGE_SPEED; // 片间消息传递速度
