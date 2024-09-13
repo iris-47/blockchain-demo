@@ -1,5 +1,5 @@
 #include "animationscene.h"
-#include "utils/loggermanager.h""
+#include "utils/loggermanager.h"
 
 #include <QVector2D>
 #include <QDebug>

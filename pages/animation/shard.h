@@ -8,6 +8,20 @@
 
 class AnimationScene;
 
+// TODO: SHARD才应该继承这个，反了。。。先将就吧。。。太丑陋了我受不了了
+class CustomItemGroup : public QObject, public QGraphicsItemGroup {
+    Q_OBJECT
+public:
+    CustomItemGroup() : QGraphicsItemGroup() {}
+    CustomItemGroup(int idx) : m_idx(idx) {}
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+private:
+    int m_idx;
+};
+
+
 // TODO: 尝试换一个东西继承，而不是继承QGraphicsEllipseItem
 // URGENT: 点击显示详细信息
 class Shard : public QObject, public QGraphicsEllipseItem
@@ -35,8 +49,9 @@ public:
 
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr);
-    QRectF boundingRect() const;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = nullptr) override;
+    QRectF boundingRect() const override;
 
 public slots:
     void reply();
@@ -47,7 +62,7 @@ private:
 
     AnimationScene* m_belongScene;
 
-    QGraphicsItemGroup *group; // 所有Item应该加入到group中，方便拖动
+    CustomItemGroup *group; // 所有Item应该加入到group中，方便拖动
     QVector <Node*> nodes;
     QVector <Message*> messages;
     QMutex messages_mutex; // 用于reset时的 messages 保护

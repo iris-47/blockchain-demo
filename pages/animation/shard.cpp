@@ -4,8 +4,12 @@
 #include "qstyleoption.h"
 #include "utils/loggermanager.h"
 
+#include <QGraphicsSceneMouseEvent>
 #include <QGraphicsItem>
 #include <QRandomGenerator>
+#include <QDialog>
+#include <QLabel>
+#include <QPushButton>
 #include <QPainter>
 #include <QTimer>
 #include <QtMath>
@@ -24,6 +28,27 @@ bool isNonOverlapping(qreal x, qreal y, QVector<Node*> nodes, float minDistance)
     return true;
 }
 
+void CustomItemGroup::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    // 将事件传递给第一个子Item
+    // URGENT 创建详情对话框
+    // int idx = 1;
+    // QDialog dialog;
+    // dialog.setWindowTitle(QString("Shard %1 Details").arg(idx));
+
+    // QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    // QLabel *infoLabel = new QLabel(QString("Details for Shard %1").arg(idx));
+    // layout->addWidget(infoLabel);
+
+    // QPushButton *closeButton = new QPushButton("Close");
+    // layout->addWidget(closeButton);
+
+    // connect(closeButton, &QPushButton::clicked, &dialog, &QDialog::accept);
+
+    // // 显示详情对话框
+    // dialog.exec();
+    QGraphicsItemGroup::mousePressEvent(event);
+}
+
 Shard::Shard() {}
 Shard::Shard(qreal x, qreal y, int nnm, int index, QColor color) :
     m_radius((std::sqrt(nnm) + 1) * CONFIG::RADIUS_RATE),
@@ -40,8 +65,7 @@ Shard::Shard(qreal x, qreal y, int nnm, int index, QColor color) :
     // pen.setWidth(3);
     // setPen(pen);
 
-    group = new QGraphicsItemGroup();
-    group->addToGroup(this);
+    group = new CustomItemGroup();
     group->setFlag(QGraphicsItem::ItemIsSelectable);
     group->setFlag(QGraphicsItem::ItemIsMovable);
 
@@ -76,6 +100,8 @@ Shard::Shard(qreal x, qreal y, int nnm, int index, QColor color) :
             nodes.append(node);
         }
     }
+
+    group->addToGroup(this);
 }
 
 // Group视作一个小的scene
@@ -278,4 +304,10 @@ void Shard::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 // 加上编号的范围
 QRectF Shard::boundingRect() const {
     return rect().adjusted(0, 0, 0, 20);
+}
+
+void Shard::mousePressEvent(QGraphicsSceneMouseEvent *event){
+    qDebug() << "Shard " << idx << " is clicked!";
+
+    // update();
 }
