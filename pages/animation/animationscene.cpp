@@ -187,4 +187,16 @@ void AnimationScene::setSpeed(){
 void AnimationScene::setConsensus(){
     m_startShardIndex = CONFIG::START_INDEX;
     m_endShardIndex = CONFIG::END_INDEX;
+
+    // 修改shards颜色
+    if(m_startShardIndex < shards.size() && m_startShardIndex >= 0){
+        for(int i = 0;i < shards.size();i++){
+            shards[i]->m_penColor = Qt::black;
+        }
+        qDebug() << "m_startShardIndex: " << m_startShardIndex;
+        shards[m_startShardIndex]->m_penColor = QColor(CONFIG::SHARD_COLOR);
+
+        // 重新绘制
+        update();
+    }
 }
