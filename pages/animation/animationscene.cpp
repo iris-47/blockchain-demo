@@ -139,7 +139,7 @@ void AnimationScene::sendMessage(Node *from, Shard *to, MessageType mtype){
 }
 
 void AnimationScene::shardReply(Shard* shard){
-    sendMessage(shard, shards[0]->m_mainNode, MessageType::VERIFIED);
+    sendMessage(shard, shards[CONFIG::START_INDEX]->m_mainNode, MessageType::VERIFIED);
 }
 
 void AnimationScene::updateMessages() {
