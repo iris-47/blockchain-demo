@@ -7,5 +7,6 @@
         <file>start.png</file>
         <file>reset.png</file>
         <file>legend.png</file>
+        <file>clear.png</file>
     </qresource>
 </RCC>

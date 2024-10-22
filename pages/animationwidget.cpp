@@ -1,7 +1,7 @@
 #include "animationwidget.h"
 #include "ui_animationwidget.h"
 
-#include "loggerwidget.h"
+#include "utils/loggermanager.h"
 #include "animation/animationscene.h"
 
 #include <QPropertyAnimation>
@@ -19,8 +19,9 @@ AnimationWidget::AnimationWidget(QWidget *parent)
     scene->initScene();
 
     ui->startBtn->setIcon(QIcon(":/icons/start.png"));
-    ui->resetBtn->setIcon(QIcon(":/icons/reset.png"));
+    ui->clearBtn->setIcon(QIcon(":/icons/clear.png"));
     ui->legendBtn->setIcon(QIcon(":/icons/legend.png"));
+    ui->resetBtn->setIcon(QIcon(":/icons/reset.png"));
 
     initConnections();
 
@@ -35,6 +36,13 @@ void AnimationWidget::initConnections()
     connect(ui->startBtn, &QPushButton::clicked, this, &AnimationWidget::onClickedStart);
     connect(ui->resetBtn, &QPushButton::clicked, this, &AnimationWidget::onClickReset);
     connect(ui->legendBtn, &QPushButton::clicked, this, &AnimationWidget::onClickLegendBtn);
+    connect(ui->clearBtn, &QPushButton::clicked, this, &AnimationWidget::onClickClear);
+}
+
+void AnimationWidget::onClickClear()
+{
+    // 清空日志
+    LoggerManager::getInstance().clearLog();
 }
 
 void AnimationWidget::onClickedStart()
@@ -42,8 +50,10 @@ void AnimationWidget::onClickedStart()
     m_isRunning = !m_isRunning;
     if(m_isRunning){
         ui->startBtn->setIcon(QIcon(":/icons/pause.png"));
+        ui->startBtn->setText("暂停");
     }else{
         ui->startBtn->setIcon(QIcon(":/icons/start.png"));
+        ui->startBtn->setText("开始");
     }
     scene->startDemo();
 }

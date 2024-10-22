@@ -16,6 +16,7 @@ public:
 
 public slots:
     void addText(const QString &message);
+    void clearText();
 
 private:
     QVBoxLayout* m_layout;

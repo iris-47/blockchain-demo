@@ -10,6 +10,11 @@ void LoggerManager::addLog(const QString &message)
     emit logAdded(message);
 }
 
+void LoggerManager::clearLog()
+{
+    emit clearAllLogs();
+}
+
 void LoggerManager::connectWidget(LoggerWidget *widget)
 {
     if(m_isConnected)
@@ -18,6 +23,7 @@ void LoggerManager::connectWidget(LoggerWidget *widget)
         return;
     }
     connect(this, &LoggerManager::logAdded, widget, &LoggerWidget::addText);
+    connect(this, &LoggerManager::clearAllLogs, widget, &LoggerWidget::clearText);
     m_isConnected = true;
 }
 

@@ -21,6 +21,17 @@ void LoggerWidget::addText(const QString &text)
     m_scrollArea->verticalScrollBar()->setValue(0);
 }
 
+void LoggerWidget::clearText()
+{
+    QLayoutItem *child;
+    // 移除所有子部件
+    while ((child = m_layout->takeAt(0)) != nullptr)
+    {
+        delete child->widget();
+        delete child;
+    }
+}
+
 LoggerWidget::LoggerWidget(QWidget *parent) : QWidget(parent)
 {
     QVBoxLayout *mainLayout = new QVBoxLayout(this);

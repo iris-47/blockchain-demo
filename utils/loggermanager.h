@@ -14,9 +14,11 @@ public:
     void connectWidget(LoggerWidget* widget);
     void disconnetWidget(LoggerWidget* widget);
     void addLog(const QString &message);
+    void clearLog();
 
 signals:
     void logAdded(const QString &message);
+    void clearAllLogs();
 
 private:
     bool m_isConnected = false;

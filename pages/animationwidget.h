@@ -25,6 +25,7 @@ private:
     Ui::AnimationWidget *ui;
     void onClickedStart();
     void onClickReset();
+    void onClickClear();
     void onClickLegendBtn();
 
     void initConnections();

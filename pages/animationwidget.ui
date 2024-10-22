@@ -67,21 +67,21 @@
       <item>
        <widget class="QPushButton" name="startBtn">
         <property name="text">
-         <string/>
+         <string>启动</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="resetBtn">
         <property name="text">
-         <string/>
+         <string>重置</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="legendBtn">
+       <widget class="QPushButton" name="clearBtn">
         <property name="text">
-         <string>隐藏图例</string>
+         <string>清除日志</string>
         </property>
        </widget>
       </item>
@@ -97,6 +97,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="legendBtn">
+        <property name="text">
+         <string>隐藏图例</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
