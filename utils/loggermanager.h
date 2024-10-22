@@ -2,6 +2,8 @@
 #define LOGGERMANAGER_H
 
 #include <QObject>
+#include <QVector>
+#include <QTabWidget>
 #include "pages/loggerwidget.h"
 
 // TODO: Logger细化分类
@@ -10,18 +12,22 @@ class LoggerManager : public QObject
     Q_OBJECT
 public:
     static LoggerManager& getInstance();
-    // must call this function before using LoggerManager
-    void connectWidget(LoggerWidget* widget);
-    void disconnetWidget(LoggerWidget* widget);
+    void registerManager(QTabWidget* loggerTabWidget);
+
+    void addWidget(LoggerWidget* widget, QString tabName = "日志");
+    void removeWidget(LoggerWidget* widget);
+
     void addLog(const QString &message);
+    void addLog(const QString &message, int idx);
     void clearLog();
 
 signals:
-    void logAdded(const QString &message);
+    void logAdded(const QString &message); // discard
+    void logAddedToWidget(const QString &message, QWidget* targetWidget);
     void clearAllLogs();
 
 private:
-    bool m_isConnected = false;
+    QTabWidget *m_loggerTabWidget; // 被管理的日志窗口
 
     LoggerManager() = default;
     LoggerManager(const LoggerManager&) = delete;

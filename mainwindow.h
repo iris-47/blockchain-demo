@@ -17,6 +17,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void init();
+
 public slots:
     void onUsageBtnClicked();
     void onAnimationBtnClicked();

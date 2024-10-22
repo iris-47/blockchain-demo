@@ -1,13 +1,33 @@
 #include "loggermanager.h"
 #include <QDebug>
 
+void LoggerManager::registerManager(QTabWidget *loggerTabWidget)
+{
+    m_loggerTabWidget = loggerTabWidget;
+    loggerTabWidget->removeTab(0);
+    loggerTabWidget->removeTab(0); // 删除自带的两个Tab
+}
+
 void LoggerManager::addLog(const QString &message)
 {
-    if(!m_isConnected){
-        qDebug() << "LoggerManager: not connected";
+    if (m_loggerTabWidget->count() == 0)
+    {
+        qDebug() << "LoggerManager: no logger widget found";
         return;
     }
-    emit logAdded(message);
+    emit logAddedToWidget(message, m_loggerTabWidget->widget(0)); // the main logger
+}
+
+void LoggerManager::addLog(const QString &message, int idx)
+{
+    if(m_loggerTabWidget->count() > idx)
+    {
+        emit logAddedToWidget(message, m_loggerTabWidget->widget(idx));
+    }
+    else
+    {
+        qDebug() << "LoggerManager: shardIndex out of range";
+    }
 }
 
 void LoggerManager::clearLog()
@@ -15,25 +35,43 @@ void LoggerManager::clearLog()
     emit clearAllLogs();
 }
 
-void LoggerManager::connectWidget(LoggerWidget *widget)
+void LoggerManager::addWidget(LoggerWidget *widget, QString tabName)
 {
-    if(m_isConnected)
-    {
-        qDebug() << "LoggerManager: already connected";
+    if(!widget){
         return;
     }
-    connect(this, &LoggerManager::logAdded, widget, &LoggerWidget::addText);
-    connect(this, &LoggerManager::clearAllLogs, widget, &LoggerWidget::clearText);
-    m_isConnected = true;
+
+    connect(this, &LoggerManager::logAddedToWidget, widget, [=](const QString &message, QWidget* targetWidget){
+        if(widget == targetWidget){
+            widget->addText(message); // 仅发送到目标widget
+        }
+    });
+    connect(this, &LoggerManager::clearAllLogs, widget, &LoggerWidget::clearText); // 清空所有Tab的日志
+
+    m_loggerTabWidget->addTab(widget, tabName);
+    qDebug() << "LoggerManager: connected widget";
 }
 
-// BUG::断开不同的Widget导致重复添加连接
-void LoggerManager::disconnetWidget(LoggerWidget *widget)
+// BUG::断开不同的 Widget 导致 index 错位
+void LoggerManager::removeWidget(LoggerWidget *widget)
 {
-    if (m_isConnected)
+    if (!widget) return;
+
+    // 从m_loggerTabWidget中删除widget
+    for(int i = 0; i < m_loggerTabWidget->count(); i++)
     {
-        disconnect(this, &LoggerManager::logAdded, widget, &LoggerWidget::addText);
-        m_isConnected = false;
+        // 断开连接
+        disconnect(this, &LoggerManager::logAddedToWidget, widget, 0);
+        disconnect(this, &LoggerManager::clearAllLogs, widget, 0);
+
+        // 移除Tab
+        if(m_loggerTabWidget->widget(i) == widget)
+        {
+            m_loggerTabWidget->removeTab(i);
+            break;
+        }
+
+        free(widget);
     }
 }
 

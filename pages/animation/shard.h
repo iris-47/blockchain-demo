@@ -47,6 +47,8 @@ public:
 
     void setSpeed(qreal speed) { m_speed = speed; }
 
+    int getNodeID(Node* node);
+
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) override;

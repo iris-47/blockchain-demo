@@ -1,5 +1,6 @@
 #include "animationscene.h"
 #include "utils/loggermanager.h"
+#include "pages/loggerwidget.h"
 
 #include <QVector2D>
 #include <QDebug>
@@ -169,12 +170,17 @@ void AnimationScene::updateMessages() {
 }
 
 void AnimationScene::addShard(qreal x, qreal y, int nnm, QColor color){
+    LoggerWidget *loggerWidget = new LoggerWidget();
+    LoggerManager::getInstance().addWidget(loggerWidget, "Shard" + QString::number(shards.size())); // 添加Shard[i]的LoggerWidget
+
     Shard *shard = new Shard{0, 0, nnm, shards.size(), color};
     shard->m_belongScene = this;
     shards.append(shard);
 
     addItem(shard->group); // 作为整体添加
     shard->group->setPos(x, y);
+
+    LoggerManager::getInstance().addLog("Shard" + QString::number(shards.size() - 1) + "初始化完成!", shards.size());
 }
 
 void AnimationScene::setSpeed(){

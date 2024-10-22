@@ -15,20 +15,19 @@ AnimationWidget::AnimationWidget(QWidget *parent)
 {
     ui->setupUi(this);
 
-
-    scene->initScene();
-
     ui->startBtn->setIcon(QIcon(":/icons/start.png"));
     ui->clearBtn->setIcon(QIcon(":/icons/clear.png"));
     ui->legendBtn->setIcon(QIcon(":/icons/legend.png"));
     ui->resetBtn->setIcon(QIcon(":/icons/reset.png"));
 
-    initConnections();
-
-    // scene->startDemo();
 
     // ui->graphicsView = new GraphicsView(scene);
     ui->graphicsView->setScene(scene);
+}
+
+void AnimationWidget::init(){
+    scene->initScene();
+    initConnections();
 }
 
 void AnimationWidget::initConnections()

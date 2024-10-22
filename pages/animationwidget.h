@@ -18,6 +18,8 @@ public:
     explicit AnimationWidget(QWidget *parent = nullptr);
     ~AnimationWidget();
 
+    void init();
+
 public slots:
     void onConfigChanged(int type);
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>582</width>
-    <height>454</height>
+    <width>580</width>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,9 +52,15 @@
     </item>
     <item>
      <widget class="QWidget" name="mainarea" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="QSplitter" name="splitter">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
@@ -66,24 +72,25 @@
            </size>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="UsageWidget" name="usagePage"/>
           <widget class="AnimationWidget" name="viewPage"/>
          </widget>
-         <widget class="LoggerWidget" name="loggerWidget" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
+         <widget class="QTabWidget" name="loggerTabWidget">
+          <property name="currentIndex">
+           <number>1</number>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>16777215</height>
-           </size>
-          </property>
+          <widget class="QWidget" name="tab_9">
+           <attribute name="title">
+            <string>Tab 1</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="tab_10">
+           <attribute name="title">
+            <string>Tab 2</string>
+           </attribute>
+          </widget>
          </widget>
         </widget>
        </item>
@@ -97,7 +104,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>582</width>
+     <width>580</width>
      <height>17</height>
     </rect>
    </property>
@@ -133,12 +140,6 @@
    <class>AnimationWidget</class>
    <extends>QWidget</extends>
    <header>pages/animationwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>LoggerWidget</class>
-   <extends>QWidget</extends>
-   <header>pages/loggerwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

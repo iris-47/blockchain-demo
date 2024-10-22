@@ -183,33 +183,47 @@ void Shard::handleMessage(Node* node, Message* message) {
 
     switch (message->mtype) {
         case MessageType::PROPOSE:
+            LoggerManager::getInstance().addLog("[节点 " + QString::number(getNodeID(node)) + "]: 收到 Propose 消息!", idx + 1);
+
             node->setBrush(ColorMap::getColor(message->mtype));
             startPBFT(node);
             break;
         case MessageType::PRE_PREPARE:
+            LoggerManager::getInstance().addLog("[节点 " + QString::number(getNodeID(node)) + "]: 收到 Pre-Prepare 消息!", idx + 1);
+
             node->setBrush(ColorMap::getColor(message->mtype));
             broadcastMessage(node, MessageType::PREPARE);
             break;
         case MessageType::PREPARE:
+            LoggerManager::getInstance().addLog("[节点 " + QString::number(getNodeID(node)) + "]: 收到 Prepare 消息!", idx + 1);
+
             node->m_prepareCnt++;
             if(node->m_prepareCnt >= 2 * nodes.size() / 3){
+                LoggerManager::getInstance().addLog("[节点 " + QString::number(getNodeID(node)) + "]: 收到足够的 Prepare 消息, 广播 Commit !!", idx + 1);
                 node->m_prepareCnt = 0;
                 node->setBrush(ColorMap::getColor(message->mtype));
                 broadcastMessage(node, MessageType::COMMIT);
             }
             break;
         case MessageType::COMMIT:
+            LoggerManager::getInstance().addLog("[节点 " + QString::number(getNodeID(node)) + "]: 收到 Commit 消息!", idx + 1);
+
             node->m_commitCnt++;
             if(node->m_commitCnt >= 2 * nodes.size() / 3){
+                LoggerManager::getInstance().addLog("[节点 " + QString::number(getNodeID(node)) + "]: 收到足够的 Commit 消息, 共识结束!!", idx + 1);
+
                 node->m_commitCnt = 0;
                 node->setBrush(ColorMap::getColor(message->mtype));
                 if(node == m_mainNode){
+                    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 共识结束，主节点发送 Verified 回复消息 ！！!");
                     consensusDone();
                 }
             }
             break;
         case MessageType::VERIFIED:
-            qDebug() << "Message verified!";
+
+
+            LoggerManager::getInstance().addLog("收到 Verified 消息!", 0);
             // node->setBrush(ColorMap::getColor(message->mtype));
             break;
 
@@ -310,4 +324,14 @@ void Shard::mousePressEvent(QGraphicsSceneMouseEvent *event){
     qDebug() << "Shard " << idx << " is clicked!";
 
     // update();
+}
+
+int Shard::getNodeID(Node* node){
+    for(int i = 0;i < nodes.size();i++){
+        if(nodes[i] == node){
+            return i;
+        }
+    }
+
+    return -1;
 }
