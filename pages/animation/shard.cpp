@@ -215,7 +215,6 @@ void Shard::handleMessage(Node* node, Message* message) {
                 node->m_commitCnt = 0;
                 node->setBrush(ColorMap::getColor(message->mtype));
                 if(node == m_mainNode){
-                    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 共识结束，主节点发送 Verified 回复消息 ！！!");
                     consensusDone();
                 }
             }
@@ -236,13 +235,14 @@ void Shard::handleMessage(Node* node, Message* message) {
 // PBFT开始
 void Shard::startPBFT(Node* node) {
     // 获取当前shard 的index
-    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 开始PBFT共识!");
+    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 开始PBFT共识!"); // 主Log
+    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 开始PBFT共识!", idx + 1); // 分片log
     broadcastMessage(node, MessageType::PRE_PREPARE);
 }
 
 // PBFT完成
 void Shard::consensusDone(){
-    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 共识结束，开始发送Reply!");
+    LoggerManager::getInstance().addLog("分片 " + QString::number(idx) + " 共识结束，开始发送Reply!", idx + 1);
 
     if(replyAnimationTimer.isActive()){
         replyAnimationTimer.stop();
