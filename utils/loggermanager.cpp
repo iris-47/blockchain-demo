@@ -57,21 +57,17 @@ void LoggerManager::removeWidget(LoggerWidget *widget)
 {
     if (!widget) return;
 
-    // 从m_loggerTabWidget中删除widget
-    for(int i = 0; i < m_loggerTabWidget->count(); i++)
+    int index = m_loggerTabWidget->indexOf(widget);
+    if (index >= 0)
     {
-        // 断开连接
         disconnect(this, &LoggerManager::logAddedToWidget, widget, 0);
         disconnect(this, &LoggerManager::clearAllLogs, widget, 0);
-
-        // 移除Tab
-        if(m_loggerTabWidget->widget(i) == widget)
-        {
-            m_loggerTabWidget->removeTab(i);
-            break;
-        }
-
-        free(widget);
+        m_loggerTabWidget->removeTab(index);
+        delete widget;
+    }
+    else
+    {
+        qDebug() << "LoggerManager: widget not found";
     }
 }
 

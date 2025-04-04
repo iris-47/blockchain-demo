@@ -37,7 +37,7 @@ public:
                                                            {MessageType::COMMIT, Qt::green},
 
                                                            {MessageType::VERIFY_REQUEST, QColor(0xFF00FF)}, // 紫色
-                                                           {MessageType::VERIFIED, Qt::green},
+                                                           {MessageType::VERIFIED, Qt::darkGreen},
                                                            {MessageType::BLOCK, Qt::blue},
                                                            };
 
@@ -62,7 +62,7 @@ public:
                                                            {MessageType::COMMIT, Qt::green},
 
                                                            {MessageType::VERIFY_REQUEST, QColor(0xFF00FF)}, // 紫色
-                                                           {MessageType::VERIFIED, Qt::green},
+                                                           {MessageType::VERIFIED, Qt::darkGreen},
                                                            {MessageType::BLOCK, Qt::blue},
                                                            };
 

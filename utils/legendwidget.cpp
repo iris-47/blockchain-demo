@@ -38,13 +38,11 @@ LegendWidget::LegendWidget(QWidget *parent)
 
     // 添加多个图例项
     mainLayout->addWidget(new LegendItem(Qt::black, "Default"));
-    mainLayout->addWidget(new LegendItem(Qt::red, "Propose"));
-    mainLayout->addWidget(new LegendItem(Qt::magenta, "Pre-Prepare"));
-    mainLayout->addWidget(new LegendItem(Qt::yellow, "Prepare"));
-    mainLayout->addWidget(new LegendItem(Qt::green, "Commit"));
-    mainLayout->addWidget(new LegendItem(QColor(0xFF00FF), "Verify Request")); // 紫色
-    mainLayout->addWidget(new LegendItem(Qt::green, "Verified"));
-    mainLayout->addWidget(new LegendItem(Qt::blue, "Block"));
+    mainLayout->addWidget(new LegendItem(Qt::red, "PROPOSE 消息"));
+    mainLayout->addWidget(new LegendItem(Qt::magenta, "PRE-PREPARE 消息"));
+    mainLayout->addWidget(new LegendItem(Qt::yellow, "PREPARE 消息"));
+    mainLayout->addWidget(new LegendItem(Qt::green, "COMMIT 消息"));
+    mainLayout->addWidget(new LegendItem(Qt::darkGreen, "VERIFIED 消息"));
 
     mainLayout->addStretch();
 

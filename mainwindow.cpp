@@ -19,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 void MainWindow::init()
 {
+    // 设置程序图标
+    setWindowIcon(QIcon(":/icons/blockchain.png"));
+    setWindowTitle("区块链系统动画演示");
+
     LoggerManager::getInstance().registerManager(ui->loggerTabWidget); // 注册日志管理器
     LoggerWidget *mainLoggerWidget = new LoggerWidget(this); // 创建主日志窗口
     LoggerManager::getInstance().addWidget(mainLoggerWidget, "系统日志"); // 添加主日志窗口
